@@ -1,0 +1,146 @@
+<section>
+    <div class="flex flex-row items-center justify-center gap-8">
+        <p class="hint-text">Search repo list by user name</p>
+        <div class="search">
+          <ng-container *ngIf="isRepoSearched">
+              <p (click)="clearSearch()">Clear</p>
+          </ng-container>
+          <input type="text" [(ngModel)]="searchKey" (keyup)="handleSearchCleaners()"
+              placeholder="Search by username...">
+        </div>
+      </div>
+      <ng-container *ngIf="isRepoSearched; else showEmptyPage">
+        <ng-container *ngIf="!showLoader; else showSkeleton">
+          <ng-container *ngIf="userDetails; else dataNotFound">
+            <div class="repo-list-body">
+              <div class="flex flex-col gap-8">
+                <div class="flex flex-row gap-8 items-center">
+                  <div class="user-image">
+                    <img [src]="userDetails?.avatar_url" alt="User Pictute">
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <div class="flex flex-row gap-1" *ngIf="userDetails?.name">
+                      <h5 class="heading-text" title="User Name">{{userDetails?.name}}</h5>
+                      <ng-container *ngIf="userDetails?.location">
+                        <p class="hint-text">from</p>
+                        <p class="user-input-text"><i>{{userDetails?.location}}</i></p>
+                      </ng-container>
+                    </div>
+                    <p class="hint-text" title="User's Login Name">{{userDetails?.login}}</p>
+                    <div *ngIf="userDetails?.blog" title="User's Blog Link" class="flex flex-row gap-2">
+                      <p class="hint-text">Website:</p>
+                      <p class="user-input-text"><a target="_blank" [href]="userDetails?.blog">{{userDetails?.blog}}</a></p>
+                    </div>
+                    <div *ngIf="userDetails?.html_url" title="User's Git Link" class="flex flex-row gap-2">
+                      <p class="hint-text">Github:</p>
+                      <p class="user-input-text"><a target="_blank" [href]="userDetails?.html_url">{{userDetails?.html_url}}</a></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="horizontal-line"></div>
+                <div class="flex items-center justify-between">
+                  <div class="flex flex-row gap-2">
+                    <p class="user-input-text">12</p>
+                    <p class="hint-text">Repo Found</p>
+                  </div>
+                  <div class="new-small-pagination" *ngIf="repoListFound?.length">
+                    <span class="item box" [ngClass]="totalPages > 1 && activePage > 1 ? 'active' : 'disable'" (click)="handlePagination('left')"><i class="fa fa-angle-left"></i></span>
+                    <span class="item box">{{activePage}}</span>
+                    <span class="item">/ {{totalPages}}</span>
+                    <span class="item box" [ngClass]="totalPages > activePage ? 'active' : 'disable'" (click)="handlePagination('right')"><i class="fa fa-angle-right"></i></span>
+                  </div>
+                </div>
+                <div class="flex flex-row gap-8 items-stretch flex-1 flex-wrap" *ngIf="responseObject[activePage-1]?.length; else noRepoFound">
+                  <div class="flex-1" *ngFor="let item of responseObject[activePage-1]">
+                    <div class="card" style="height: 100%;">
+                      <div class="flex flex-col gap-4">
+                        <div class="flex flex-row gap-2 items-center">
+                          <h5 class="heading-text" title="Repo Name">{{item?.name}}</h5>
+                          <p class="visibility-text" title="Repo Visibility">{{item?.visibility}}</p>
+                        </div>
+                        <p class="hint-text" title="Repo Description">{{item?.description}}</p>
+                        <ng-container *ngIf="item?.language || (item?.stargazers_count != null) || (item?.forks != null)">
+                          <div class="flex flex-row gap-4 items-center">
+                            <div class="flex flex-row gap-2 items-center" title="Repo Language" *ngIf="item?.language">
+                              <p class="language-circle"></p>
+                              <p class="hint-text">{{item?.language}}</p>
+                            </div>
+                            <div class="flex flex-row gap-2 items-center" title="Stargazers Count" *ngIf="item?.stargazers_count != null">
+                              <div class="icons">
+                                <svg aria-label="stars" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-star">
+                                  <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"></path>
+                                </svg>
+                              </div>
+                              <p class="hint-text">{{item?.stargazers_count}}</p>
+                            </div>
+                            <div class="flex flex-row gap-2 items-center" title="Forks Count" *ngIf="item?.forks != null">
+                              <div class="icons">
+                                <svg aria-label="forks" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-repo-forked">
+                                  <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"></path>
+                                </svg>
+                              </div>
+                              <p class="hint-text">{{item?.forks}}</p>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="item?.topics">
+                          <div class="flex flex-row gap-3 flex-wrap">
+                            <p *ngFor="let topic of item?.topics" title="Repo Topics" class="topics-tag">{{topic}}</p>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #noRepoFound>
+                  <div class="flex flex-col items-center justify-center gap-4">
+                    <img src="../assets/searchFilter.svg" alt="Empty">
+                    <p class="user-input-text">Oops, No Result Found</p>
+                    <p class="hint-text">We didn't find any repo for your Search</p>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #dataNotFound>
+            <div class="flex flex-col items-center justify-center gap-4" style="min-height: calc(80vh - 80px);">
+              <img src="../assets/searchFilter.svg" alt="Empty">
+              <p class="user-input-text">Oops, No Result Found</p>
+              <p class="hint-text">We didn't find anything for your Search</p>
+            </div>
+          </ng-template>
+        </ng-container>
+        <ng-template #showSkeleton>
+          <div class="repo-list-body">
+            <div class="flex flex-row gap-8 items-center">
+              <app-api-loader [style]="{ 'width': '150px', 'height':'150px', 'border-radius': '50%' }"></app-api-loader>
+              <div class="flex flex-col gap-4">
+                <app-api-loader [style]="{ 'width': '150px', 'min-width':'150px', 'height':'32px' }"></app-api-loader>
+                <app-api-loader [style]="{ 'width': '250px', 'min-width':'150px', 'height':'32px' }"></app-api-loader>
+              </div>
+            </div>
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-row gap-8">
+                <app-api-loader [style]="{ 'width': 'calc(80vh - 16px)', 'height': '52px'}"></app-api-loader>
+                <app-api-loader [style]="{ 'width': 'calc(80vh - 16px)', 'height': '52px'}"></app-api-loader>
+              </div>
+              <div class="flex flex-row gap-8">
+                <app-api-loader [style]="{ 'width': 'calc(80vh - 16px)', 'height': '52px'}"></app-api-loader>
+                <app-api-loader [style]="{ 'width': 'calc(80vh - 16px)', 'height': '52px'}"></app-api-loader>
+              </div>
+              <div class="flex flex-row gap-8">
+                <app-api-loader [style]="{ 'width': 'calc(80vh - 16px)', 'height': '52px'}"></app-api-loader>
+                <app-api-loader [style]="{ 'width': 'calc(80vh - 16px)', 'height': '52px'}"></app-api-loader>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+      <ng-template #showEmptyPage>
+        <div class="flex flex-col items-center justify-center gap-4" style="min-height: calc(80vh - 80px);">
+          <img src="/assets/empty-page.svg" alt="Empty">
+          <p class="user-input-text">You did not search yet</p>
+          <p class="hint-text">Kindly search by username to get all repo list</p>
+        </div>
+      </ng-template>
+</section>

@@ -1,3 +1,89 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Universal CSS
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+// Variables
+
+.font-12{
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 160%;
+}
+
+.font-16{
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 160%;
+}
+
+.font-16-b{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+}
+
+.font-18{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+}
+
+$bg-1 : #253138;
+$bg-2 : #354650;
+$stroke : #475E6C;
+$text-grey : #98A6AD;
+$text-dark : #E2E9ED;
+$primary-theme : #E54D0C;
+$secondary-theme : #0075FF;
+$button-color : #FFFFFF;
+
+
+// Texts
+
+.heading-text{ // use h5
+    color: $text-dark;
+    @extend .font-18;
+}
+
+.user-input-text{ // use p
+    color: $text-dark;
+    @extend .font-16-b;
+}
+
+.hint-text{ // use p
+    color: $text-grey;
+    @extend .font-16;
+}
+
+.hint-text-sm{ // use p
+    color: $text-grey;
+    @extend .font-12;
+}
+
+
+// Inputs
+
+input{
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    border-radius: 12px;
+    height: 48px;
+    @extend .user-input-text;
+    border: 2px solid $stroke !important;
+
+    &:focus-visible{
+        outline: none;
+    }
+}

@@ -1,0 +1,9 @@
+@import './../styles.scss';
+
+.main-background{
+    background-color: $bg-1;
+    width: 100vw;
+    height: 100vh;
+    padding: 32px;
+    overflow-y: auto;
+}

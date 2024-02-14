@@ -1,0 +1,124 @@
+@import '../../styles.scss';
+
+.search {
+    position: relative;
+    min-width: 225px;
+    max-width: 480px;
+    width: 100%;
+    input[type='text'] {
+        height: 48px;
+        width: 100%;
+        border: none;
+        padding: 0px 24px;
+        border-radius: 8px;
+    }
+    p {
+        position: absolute;
+        top: 12px;
+        right: 24px;
+        @extend .font-16;
+        color: $primary-theme;
+        cursor: pointer;
+    }
+}
+
+.repo-list-body{
+    padding: 5vh 10vw;
+
+    @media (max-width: 768px){
+        padding: 3vh 3vw;
+    }
+}
+
+.user-image{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid $stroke;
+
+    img{
+        height: 100%;
+        width: 100%;
+        border-radius: 50%;
+    }
+}
+
+.horizontal-line{
+    width: 100%;
+    border-top: 2px solid $stroke;
+    margin: 2vh 0px;
+}
+
+.card{
+    background-color: $bg-2;
+    border: 2px solid $stroke;
+    border-radius: 12px;
+    min-width: 320px;
+    padding: 32px;
+
+    @media (max-width: 768px){
+        padding: 24px;
+    }
+}
+
+.visibility-text{
+    padding: 2px 12px;
+    border-radius: 8px;
+    border: 2px solid $stroke;
+    @extend .hint-text-sm;
+}
+
+.topics-tag{
+    padding: 4px 12px;
+    border-radius: 8px;
+    background-color: $secondary-theme;
+    color: $button-color;
+    @extend .font-16-b;
+}
+
+.language-circle{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: $secondary-theme;
+}
+
+.icons svg{
+    fill: $text-grey;
+}
+
+.new-small-pagination{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    .item{
+        @extend .hint-text;
+        margin-right: 8px;
+        &.box{
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid $stroke;
+
+            .fa{
+                font-size: 20px;
+                font-weight: 900;
+            }
+
+            &.active{
+                cursor: pointer;
+                .fa{
+                    color: $primary-theme !important;
+                }
+            }
+
+            &.disable{
+                pointer-events: none;
+                opacity: 0.7;
+            }
+        }
+    }
+}
